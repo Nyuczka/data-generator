@@ -1,0 +1,2 @@
+INSERT INTO station(name,mac_address, evse_id, org_name)
+VALUES ('PALO ALTO CA / BRYANT #1', '000D6F0000A20D9E', DEFAULT, 'City of Palo Alto'),('PALO ALTO CA / BRYANT #2', '000D6F0000A2108E', DEFAULT, 'City of Palo Alto'),('PALO ALTO CA / HAMILTON #1', '000D:6F00:015A:9D76', DEFAULT, 'City of Palo Alto'),('PALO ALTO CA / HAMILTON #2', '000D:6F00:009E:D39E', DEFAULT, 'City of Palo Alto'),('PALO ALTO CA / HIGH #4', '000D6F0000A20F47', DEFAULT, 'City of Palo Alto');
