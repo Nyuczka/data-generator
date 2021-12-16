@@ -1,3 +1,6 @@
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
 @Grab('com.xlson.groovycsv:groovycsv:1.3')
 import static com.xlson.groovycsv.CsvParser.parseCsv
 
@@ -14,20 +17,17 @@ void parseData(String fileName, String insertHeader, List<String> columns) {
     for (line in csvFile) {
 
         StringBuilder builder = new StringBuilder("(")
-        columns.forEach(column -> {
-
-            String value = !(line."$column".isEmpty()) ? line."$column" : "DEFAULT"
-            if (!value.equalsIgnoreCase("DEFAULT")) {
-                builder.append("'").append(value).append("'")
-            } else {
-                builder.append(value)
-            }
-            if (column.equalsIgnoreCase(columns.last())) {
+        for(column in columns){
+            String columnLine = line."$column"
+            String value = setColumnValue(column, columnLine)
+            appendFieldInCorrectFormat(builder, value)
+            if(column.equalsIgnoreCase(columns.last())){
                 builder.append(")")
-            } else {
+            }
+            else {
                 builder.append(", ")
             }
-        })
+        }
         stations.add(builder.toString())
     }
 
@@ -39,6 +39,27 @@ void parseData(String fileName, String insertHeader, List<String> columns) {
         }
     }
 }
+
+String setColumnValue(String column ,String columnLine){
+    if (columnLine.isEmpty()) {
+        return "DEFAULT"
+    } else if (column.contains("Date")) {
+        return LocalDateTime.parse(
+                columnLine.toString(),
+                DateTimeFormatter.ofPattern("M/d/yyyy H:m")
+        ).format("yyyy-MM-dd HH:mm")
+    }
+    return columnLine
+}
+
+void appendFieldInCorrectFormat(StringBuilder builder, String value){
+    if(value.equalsIgnoreCase("default"))
+        builder.append(value)
+    else
+        builder.append("'").append(value).append("'")
+}
+
+
 
 List<String> stations = Arrays.asList("Station Name", "MAC Address", "EVSE ID", "Org Name")
 
